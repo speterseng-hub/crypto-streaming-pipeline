@@ -1,0 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+venv/
+.venv/
+env/
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Environment & secrets — NEVER commit these
+.env
+*.json
+!.env.example
+sa-key.json
+*-key.json
+credentials*.json
+service-account*.json
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Dataflow
+dataflow-*.log
+
+# Jupyter
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Terraform state (contains sensitive data)
+*.tfstate
+*.tfstate.backup
+.terraform/

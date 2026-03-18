@@ -1,0 +1,19 @@
+# Producer
+websocket-client==1.8.0
+google-cloud-pubsub==2.23.0
+
+# Beam / Dataflow
+apache-beam[gcp]==2.60.0
+
+# Spark (local dev — Dataproc uses cluster-managed Spark)
+pyspark==3.5.3
+
+# GCP clients
+google-cloud-bigquery==3.25.0
+google-cloud-storage==2.18.0
+google-cloud-bigtable==2.26.0
+
+# Utilities
+python-dotenv==1.0.1
+pydantic==2.9.2
+structlog==24.4.0
