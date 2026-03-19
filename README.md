@@ -46,9 +46,12 @@ crypto-streaming-pipeline/
 
 | Phase | Component | Status |
 |-------|-----------|--------|
-| 1a | Coinbase WebSocket producer → Pub/Sub | 🚧 In Progress |
-| 1b | Dataflow Beam pipeline → BigQuery + GCS | 📋 Planned |
-| 2 | Spark Structured Streaming → Bigtable | 📋 Planned |
+| 1a | Coinbase WebSocket producer → Pub/Sub → BigQuery | ✅ Done |
+| 1b | GCS Parquet backup + pipeline heartbeat / gap detection | 📋 Next |
+| 2 | Historical backfill via Coinbase REST API | 📋 Planned |
+| 3 | Looker Studio dashboard with BigQuery materialized views | 📋 Planned |
+| 4 | Daily batch reconciliation (Lambda-Lite: Parquet → staging → MERGE) | 📋 Planned |
+| 5 | ML feature engineering → BigQuery ML → Vertex AI | 📋 Planned |
 
 ## GCP Services Used
 

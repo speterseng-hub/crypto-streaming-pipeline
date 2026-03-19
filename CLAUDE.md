@@ -45,10 +45,35 @@ Google Cloud Pub/Sub (crypto-trades-raw)
       ↓
 beam_pipeline/pipeline.py  (Dataflow / DirectRunner)
       ├─ Branch A → BigQuery: trades_raw  (every trade event)
-      └─ Branch B → 1-min FixedWindow → CombinePerKey → BigQuery: trades_aggregated_1min
+      ├─ Branch B → 1-min FixedWindow → CombinePerKey → BigQuery: trades_aggregated_1min
+      └─ Branch C → GCS Parquet backup (Phase 1b, planned)
 ```
 
-**Phase 2 (planned):** Pub/Sub → Dataproc (Spark Structured Streaming) → Bigtable for anomaly detection and low-latency lookups.
+## Roadmap
+
+| Phase | Component | Status |
+|---|---|---|
+| 1a | Coinbase WebSocket producer → Pub/Sub → BigQuery | ✅ Done |
+| 1b | GCS Parquet backup branch + pipeline heartbeat / gap detection | 📋 Next |
+| 2 | Historical backfill via Coinbase REST API | 📋 Planned |
+| 3 | Looker Studio dashboard with materialized views | 📋 Planned |
+| 4 | Daily batch reconciliation (Lambda-Lite: GCS Parquet → BQ staging → MERGE) | 📋 Planned |
+| 5 | ML feature engineering → BigQuery ML baseline → Vertex AI | 📋 Planned |
+
+## Running locally (Git Bash on Windows)
+
+```bash
+# Load env vars (handles Windows CRLF)
+set -a && source .env && set +a
+export GOOGLE_APPLICATION_CREDENTIALS=$(pwd)/sa-key.json
+export PYTHONPATH=$(pwd)
+
+# Terminal 1 — producer
+python producer/coinbase_producer.py
+
+# Terminal 2 — Beam pipeline
+python beam_pipeline/pipeline.py --runner=DirectRunner
+```
 
 ## Key Modules
 
