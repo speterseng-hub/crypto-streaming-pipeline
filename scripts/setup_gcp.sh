@@ -17,6 +17,7 @@ REGION="${GCP_REGION:-us-central1}"
 PUBSUB_TOPIC="${PUBSUB_TOPIC_ID:-crypto-trades-raw}"
 PUBSUB_SUB="${PUBSUB_SUBSCRIPTION_ID:-crypto-trades-beam-sub}"
 BQ_DATASET="${BQ_DATASET:-crypto_streaming}"
+BQ_TABLE_HEARTBEAT="${BQ_TABLE_HEARTBEAT:-pipeline_heartbeat}"
 
 echo "==> Setting project: $GCP_PROJECT_ID"
 gcloud config set project "$GCP_PROJECT_ID"
@@ -59,6 +60,16 @@ bq --project_id="$GCP_PROJECT_ID" mk \
   --location="$REGION" \
   "$BQ_DATASET" \
   2>/dev/null || echo "  Dataset already exists."
+
+# ── 4b. Create pipeline_heartbeat table ──────────────────────────────────────
+echo "==> Creating BigQuery table: $BQ_DATASET.$BQ_TABLE_HEARTBEAT"
+bq --project_id="$GCP_PROJECT_ID" mk \
+  --table \
+  --time_partitioning_field=window_start \
+  --time_partitioning_type=DAY \
+  "$BQ_DATASET.$BQ_TABLE_HEARTBEAT" \
+  "product_id:STRING,window_start:TIMESTAMP,window_end:TIMESTAMP,trade_count:INTEGER" \
+  2>/dev/null || echo "  Table already exists."
 
 # ── 5. Create service account for the pipeline ───────────────────────────────
 SA_NAME="crypto-pipeline-sa"

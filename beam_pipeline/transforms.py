@@ -146,3 +146,52 @@ class FormatRawForBigQueryFn(beam.DoFn):
             "side": trade["side"],
             "timestamp": trade["timestamp"],
         }
+
+
+class ParquetSink(beam.io.fileio.FileSink):
+    """
+    Streaming-compatible Parquet sink for use with beam.io.fileio.WriteToFiles.
+
+    WriteToParquet uses the old-style Write sink API which re-applies global
+    windowing internally, making it incompatible with streaming pipelines.
+    WriteToFiles respects the existing window and calls open/write/flush per file.
+    """
+    def __init__(self, schema):
+        self._schema = schema
+
+    def open(self, fh):
+        self._fh = fh
+        self._rows = []
+
+    def write(self, element):
+        self._rows.append(element)
+
+    def flush(self):
+        import io
+        import pyarrow
+        import pyarrow.parquet as pq
+        if self._rows:
+            table = pyarrow.Table.from_pylist(self._rows, schema=self._schema)
+            buf = io.BytesIO()
+            pq.write_table(table, buf)
+            self._fh.write(buf.getvalue())
+
+
+class HeartbeatFn(beam.DoFn):
+    """
+    Emits one heartbeat row per (product_id, window) from the already-aggregated result.
+    Reuses the output of AggregateTradesFn so no extra work is done.
+
+    A missing row in pipeline_heartbeat for a given minute signals a gap —
+    either the producer was down or no trades arrived for that product.
+    """
+    def process(self, element, window=beam.DoFn.WindowParam):
+        product_id, agg = element
+        if agg is None:
+            return
+        yield {
+            "product_id": product_id,
+            "window_start": window.start.to_utc_datetime().isoformat(),
+            "window_end": window.end.to_utc_datetime().isoformat(),
+            "trade_count": agg["trade_count"],
+        }

@@ -15,6 +15,16 @@ TRADES_RAW_SCHEMA = {
     ]
 }
 
+# Pipeline heartbeat — one row per (product, window); missing row = gap
+PIPELINE_HEARTBEAT_SCHEMA = {
+    "fields": [
+        {"name": "product_id",   "type": "STRING",    "mode": "REQUIRED"},
+        {"name": "window_start", "type": "TIMESTAMP", "mode": "REQUIRED"},
+        {"name": "window_end",   "type": "TIMESTAMP", "mode": "REQUIRED"},
+        {"name": "trade_count",  "type": "INT64",     "mode": "REQUIRED"},
+    ]
+}
+
 # 1-minute aggregated window results
 TRADES_AGGREGATED_SCHEMA = {
     "fields": [

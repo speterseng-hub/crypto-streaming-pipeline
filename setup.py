@@ -15,5 +15,6 @@ setuptools.setup(
         "google-cloud-bigtable==2.26.0",
         "pydantic==2.9.2",
         "structlog==24.4.0",
+        "pyarrow==17.0.0",
     ],
 )

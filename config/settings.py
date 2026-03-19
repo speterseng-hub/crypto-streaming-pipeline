@@ -18,6 +18,7 @@ PUBSUB_SUBSCRIPTION_ID = os.getenv("PUBSUB_SUBSCRIPTION_ID", "crypto-trades-beam
 BQ_DATASET = os.getenv("BQ_DATASET", "crypto_streaming")
 BQ_TABLE_RAW = os.getenv("BQ_TABLE_RAW", "trades_raw")
 BQ_TABLE_AGGREGATED = os.getenv("BQ_TABLE_AGGREGATED", "trades_aggregated_1min")
+BQ_TABLE_HEARTBEAT = os.getenv("BQ_TABLE_HEARTBEAT", "pipeline_heartbeat")
 
 # ── GCS ───────────────────────────────────────────────────────────────────────
 GCS_BUCKET = os.environ["GCS_BUCKET"]
