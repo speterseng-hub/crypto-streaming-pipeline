@@ -60,13 +60,24 @@ crypto-streaming-pipeline/
 - **Bigtable** — low-latency NoSQL for real-time lookups
 - **Cloud Composer** — managed Airflow (orchestration)
 
+## Documentation
+
+Detailed docs for each source folder:
+
+| Folder README | Contents |
+|---|---|
+| `config/README.md` | All `settings.py` variables, loading mechanism, design decisions, known limitations |
+| `producer/README.md` | Pydantic schemas, WebSocket callbacks, Pub/Sub publish flow, exponential backoff, known gaps |
+| `beam_pipeline/README.md` | BigQuery schemas, all Beam transform classes, full pipeline graph, execution modes, known gaps |
+| `scripts/README.md` | `setup_gcp.sh` walkthrough: GCP API enablement, resource creation, IAM setup, idempotency pattern |
+
 ## Quick Start
 
 ```bash
-# 1. Setup environment
-python -m venv venv
-source venv/bin/activate  # Windows: venv\Scripts\activate
-pip install -r requirements.txt
+# 1. Setup environment (using uv)
+uv venv
+source .venv/Scripts/activate  # Windows: .venv\Scripts\activate
+uv pip install -r requirements.txt
 
 # 2. Configure GCP credentials
 export GOOGLE_APPLICATION_CREDENTIALS="path/to/service-account.json"
