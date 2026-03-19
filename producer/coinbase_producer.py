@@ -15,7 +15,7 @@ import signal
 import sys
 import time
 import threading
-from typing import Optional
+#from typing import Optional
 
 import structlog
 import websocket

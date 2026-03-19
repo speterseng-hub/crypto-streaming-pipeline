@@ -14,9 +14,9 @@ set -euo pipefail
 : "${GCS_BUCKET:?Need to set GCS_BUCKET}"
 
 REGION="${GCP_REGION:-us-central1}"
-PUBSUB_TOPIC="crypto-trades-raw"
-PUBSUB_SUB="crypto-trades-beam-sub"
-BQ_DATASET="crypto_streaming"
+PUBSUB_TOPIC="${PUBSUB_TOPIC_ID:-crypto-trades-raw}"
+PUBSUB_SUB="${PUBSUB_SUBSCRIPTION_ID:-crypto-trades-beam-sub}"
+BQ_DATASET="${BQ_DATASET:-crypto_streaming}"
 
 echo "==> Setting project: $GCP_PROJECT_ID"
 gcloud config set project "$GCP_PROJECT_ID"
